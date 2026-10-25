@@ -1,0 +1,8 @@
+DTC_INCLUDE += $(srctree)/../cq7790s-modules/qcom/opensource/audio-kernel/include
+
+dtbo-$(CONFIG_ARCH_KERA) += ../../qcom/audio/kera-audio.dtbo \
+		kerap-iot-audio-retroid-pocket-duo-overlay.dtbo
+
+always-y := $(dtb-y) $(dtbo-y)
+subdir-y := $(dts-dirs)
+clean-files := *.dtb *.dtbo
