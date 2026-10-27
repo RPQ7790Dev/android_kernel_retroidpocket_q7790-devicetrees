@@ -1,0 +1,9 @@
+&cam_hf_qtb { status = "disabled"; };
+&cambistmclkcc { status = "disabled"; };
+&camcc { status = "disabled"; };
+&cam_cc_ipe_0_gdsc { status = "disabled"; };
+&cam_cc_ofe_gdsc { status = "disabled"; };
+&cam_cc_tfe_0_gdsc { status = "disabled"; };
+&cam_cc_tfe_1_gdsc { status = "disabled"; };
+&cam_cc_tfe_2_gdsc { status = "disabled"; };
+&cam_cc_titan_top_gdsc { status = "disabled"; };

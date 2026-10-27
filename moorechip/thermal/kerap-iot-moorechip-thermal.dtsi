@@ -1,0 +1,118 @@
+#include <dt-bindings/gpio/gpio.h>
+
+&pmxr2230_sys_therm_11 {
+	status = "disabled";
+};
+
+&sys_therm_11 {
+	status = "disabled";
+};
+
+&pm8550ve_f_die_temp {
+	status = "disabled";
+};
+
+&socd_trip {
+	temperature = <95>;
+};
+
+&tlmm {
+	fan_ctrl {
+		fan_en_default: fan_en_default {
+			mux {
+				pins = "gpio55";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio55";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		fan_en_sleep: fan_en_sleep {
+			mux {
+				pins = "gpio55";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio55";
+				drive-strength = <2>;
+				bias-disable;
+				output-low;
+			};
+		};
+		fan_fg_default: fan_fg_default {
+			mux {
+				pins = "gpio3";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio3";
+				drive-strength = <2>;
+				bias-pull-up;
+				input-enable;
+			};
+		};
+		fan_fg_sleep: fan_fg_sleep {
+			mux {
+				pins = "gpio3";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio3";
+				drive-strength = <2>;
+				bias-pull-up;
+				input-enable;
+			};
+		};
+	};
+};
+
+&pmxr2230_gpios {
+	fan_pwm_ctrl {
+		fan_pwm_ctrl_default: fan_pwm_ctrl_default {
+			pins = "gpio8";
+			function = "func1";
+			input-disable;
+			output-enable;
+			bias-disable;
+			power-source = <1>;
+			qcom,drive-strength = <2>;
+		};
+
+		fan_pwm_ctrl_sleep: fan_pwm_ctrl_sleep {
+			pins = "gpio8";
+			input-enable;
+			bias-pull-down;
+		};
+	};
+};
+
+&spmi_bus {
+	qcom,pmxr2230@1 {
+		pmxr2230_pwm: pwm {
+			compatible = "qcom,pm8350c-pwm";
+			#pwm-cells = <2>;
+		};
+	};
+};
+
+&soc {
+	fan_controller {
+		compatible = "gpio5-pwm";
+		pwms = <&pmxr2230_pwm 3 40000>;
+		gpio5-pwm-state = <0>;
+		gpio5-pwm-duty-ns = <10000>;
+		gpio5-pwm-period-ns = <40000>;
+		qcom,fan-en-gpio = <&tlmm 55 0>;
+		qcom,fan-fg-gpio = <&tlmm 3 0x2004>;
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&fan_pwm_ctrl_default &fan_en_default &fan_fg_default>;
+		pinctrl-1 = <&fan_pwm_ctrl_sleep &fan_en_sleep &fan_fg_sleep>;
+	};
+};

@@ -1,0 +1,347 @@
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/clock/qcom,gcc-kera.h>
+#include <dt-bindings/interconnect/qcom,icc.h>
+#include <dt-bindings/interconnect/qcom,kera.h>
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&aliases {
+	hsuart1 = &qupv3_se10_uart;
+};
+
+&wcd_usbss {
+	status = "disabled";
+};
+
+&qupv3_se8_spi {
+	status = "disabled";
+};
+
+&usb0 {
+	/delete-property/ qcom,wcd_usbss;
+};
+
+&qupv3_se0_i2c {
+	status = "okay";
+};
+
+&qupv3_se0_i2c_sleep {
+	config {
+		output-low;
+	};
+};
+
+&qupv3_se6_i2c_scl_active {
+	mux {
+		pins = "gpio42";
+		function = "qup1_se6_l1_mira";
+	};
+
+	config {
+		pins = "gpio42";
+	};
+};
+
+&qupv3_se6_i2c_sleep {
+	mux {
+		pins = "gpio40", "gpio42";
+	};
+
+	config {
+		pins = "gpio40", "gpio42";
+	};
+};
+
+&tlmm {
+	qupv3_se10_uart_pins: qupv3_se10_uart_pins {
+		qupv3_se10_uart_txd_active: qupv3_se10_uart_txd_active {
+			mux {
+				pins = "gpio10";
+				function = "qup2_se2_l2";
+			};
+
+			config {
+				pins = "gpio10";
+				drive-strength = <2>;
+				bias-pull-up;
+				qcom,i2c_pull;
+			};
+		};
+
+		qupv3_se10_uart_rxd_active: qupv3_se10_uart_rxd_active {
+			mux {
+				pins = "gpio11";
+				function = "qup2_se2_l3";
+			};
+
+			config {
+				pins = "gpio11";
+				drive-strength = <2>;
+				bias-pull-up;
+				qcom,i2c_pull;
+			};
+		};
+
+		qupv3_se10_uart_sleep: qupv3_se10_uart_sleep {
+			mux {
+				pins = "gpio10", "gpio11";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio10", "gpio11";
+				drive-strength = <2>;
+				bias-pull-down;
+			};
+		};
+	};
+
+	pmx_sec_ts_active {
+		sec_ts_active: sec_ts_active {
+			mux {
+				pins = "gpio124", "gpio123";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio124", "gpio123";
+				drive-strength = <8>;
+				bias-pull-up;
+			};
+		};
+	};
+
+	pmx_sec_ts_reset_suspend {
+		sec_ts_reset_suspend: sec_ts_reset_suspend {
+			mux {
+				pins = "gpio124";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio124";
+				drive-strength = <2>;
+				bias-pull-down;
+			};
+		};
+	};
+
+	pmx_sec_ts_int_suspend {
+		sec_ts_int_suspend: sec_ts_int_suspend {
+			mux {
+				pins = "gpio123";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio123";
+				drive-strength = <2>;
+				bias-pull-down;
+			};
+		};
+	};
+
+	pmx_sec_ts_release {
+		sec_ts_release: sec_ts_release {
+			mux {
+				pins = "gpio124", "gpio123";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio124", "gpio123";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+	};
+
+	hall_int_gpio: hall-int-gpio {
+		mux {
+			pins = "gpio31";
+			function = "gpio";
+		};
+
+		config {
+			pins = "gpio31";
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+
+	ics_haptic_pins: ics_haptic_pins {
+		ics_haptic_pinctrl_default: ics_haptic_pinctrl_default {
+			mux {
+				pins = "gpio68", "gpio125";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio68", "gpio125";
+				drive-strength = <2>;
+				bias-pull-up;
+				output-high;
+			};
+		};
+	};
+
+	mcu_power_ctrl {
+		uart_power_default: uart_power_default {
+			mux {
+				pins = "gpio54";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio54";
+				drive-strength = <2>;
+				bias-pull-up;
+				output-high;
+			};
+		};
+		uart_power_sleep: uart_power_sleep {
+			mux {
+				pins = "gpio54";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio54";
+				drive-strength = <2>;
+				bias-pull-down;
+				output-low;
+			};
+		};
+		mcu_power_default: mcu_power_default {
+			mux {
+				pins = "gpio56";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio56";
+				drive-strength = <2>;
+				bias-pull-up;
+				output-high;
+			};
+		};
+		mcu_power_sleep: mcu_power_sleep {
+			mux {
+				pins = "gpio56";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio56";
+				drive-strength = <2>;
+				bias-pull-down;
+				output-low;
+			};
+		};
+	};
+};
+
+&qupv3_2 {
+	qupv3_se10_uart: uart@888000 {
+		compatible = "qcom,msm-geni-serial-hs";
+		reg = <0x888000 0x4000>;
+		reg-names = "se_phys";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		interrupts-extended = <&intc GIC_SPI 584 IRQ_TYPE_LEVEL_HIGH>,
+				<&tlmm 11 IRQ_TYPE_LEVEL_HIGH>;
+		clock-names = "se-clk";
+		clocks = <&gcc GCC_QUPV3_WRAP2_S2_CLK>;
+		interconnect-names = "qup-core", "qup-config", "qup-memory";
+		interconnects =
+			<&clk_virt MASTER_QUP_CORE_2 &clk_virt SLAVE_QUP_CORE_2>,
+			<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_QUP_2>,
+			<&aggre2_noc MASTER_QUP_2 &mc_virt SLAVE_EBI1>;
+		pinctrl-names = "default", "active", "sleep", "shutdown";
+		pinctrl-0 = <&qupv3_se10_uart_sleep>;
+		pinctrl-1 = <&qupv3_se10_uart_txd_active>,
+			<&qupv3_se10_uart_rxd_active>;
+		pinctrl-2 = <&qupv3_se10_uart_sleep>;
+		pinctrl-3 = <&qupv3_se10_uart_sleep>;
+		dma-names = "tx", "rx";
+		qcom,wakeup-byte = <0xfd>;
+		qcom,suspend-ignore-children;
+		qcom,auto-suspend-disable;
+		status = "okay";
+	};
+};
+
+&qupv3_se2_i2c {
+	clock-frequency = <400000>;
+	status = "okay";
+
+	haptic_hv@5a {
+		compatible = "awinic,haptic_hv";
+		reg = <0x5a>;
+		irq-gpio = <&tlmm 125 0>;
+		reset-gpio = <&tlmm 68 0>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&ics_haptic_pinctrl_default>;
+		f0_pre = <2600>;
+		mode = /bits/ 8 <5>;
+		aw8692x_f0_cali_percent = /bits/ 8 <15>;
+		aw8692x_gain_bypass = /bits/ 8 <1>;
+		aw8692x_uvlo_vol_default = /bits/ 8 <0>;
+		aw8692x_cont_smart_loop = /bits/ 8 <0>;
+		aw8692x_cont_drv1_lvl = /bits/ 8 <0x7f>;
+		aw8692x_cont_lra_vrms = <1000>;
+		aw8692x_cont_brk_time = /bits/ 8 <0x08>;
+		aw8692x_cont_track_margin = /bits/ 8 <0x0f>;
+		aw8692x_cont_brk_gain = /bits/ 8 <0x08>;
+		aw8692x_cont_drv1_time = /bits/ 8 <0x04>;
+		aw8692x_cont_drv2_time = /bits/ 8 <0x14>;
+		aw8692x_duration_time = /bits/ 8 <20 30 60>;
+		aw8692x_d2s_gain = /bits/ 8 <0x04>;
+		aw8692x_trig_config = /bits/ 8 <0 0 0 1 0 2 0 0
+						 0 0 0 1 0 2 0 0
+						 0 0 0 1 0 2 0 0>;
+		aw8692x_bst_vol_default = <8000>;
+		aw8692x_is_enabled_track_en;
+	};
+};
+
+&soc {
+	codec_vdd_1v8: codec_vdd_1v8 {
+		compatible = "regulator-fixed";
+		regulator-name = "codec_vdd_1v8";
+		gpio = <&tlmm 163 GPIO_ACTIVE_HIGH>;
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		enable-active-high;
+	};
+
+	codec_vdd_3v3: codec_vdd_3v3 {
+		compatible = "regulator-fixed";
+		regulator-name = "codec_vdd_3v3";
+		gpio = <&tlmm 164 GPIO_ACTIVE_HIGH>;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		enable-active-high;
+	};
+
+	hall_switch: hall@0 {
+		compatible = "qcom,hall-switch";
+		hall-gpio = <&tlmm 31 0>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&hall_int_gpio>;
+	};
+
+	extcon_demo: extcon-demo {
+		compatible = "extcon_demo";
+		status = "okay";
+	};
+
+	mcu_power_ctrl: mcu_power_ctrl {
+		compatible = "mcu-power-ctrl";
+		pinctrl-names = "default", "sleep";
+		pinctrl-0 = <&uart_power_default>, <&mcu_power_default>;
+		pinctrl-1 = <&uart_power_sleep>, <&mcu_power_sleep>;
+		uart_power_gpio = <&tlmm 54 GPIO_ACTIVE_HIGH>;
+		mcu_power_gpio = <&tlmm 56 GPIO_ACTIVE_HIGH>;
+	};
+};
