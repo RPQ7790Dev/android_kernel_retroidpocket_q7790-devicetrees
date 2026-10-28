@@ -1,4 +1,5 @@
 #include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
 #include <dt-bindings/clock/qcom,gcc-kera.h>
 #include <dt-bindings/interconnect/qcom,icc.h>
 #include <dt-bindings/interconnect/qcom,kera.h>
@@ -324,11 +325,20 @@
 		enable-active-high;
 	};
 
-	hall_switch: hall@0 {
-		compatible = "qcom,hall-switch";
-		hall-gpio = <&tlmm 31 0>;
+	hall_keys: hall-keys {
+		compatible = "gpio-keys";
+		label = "hall-keys";
 		pinctrl-names = "default";
 		pinctrl-0 = <&hall_int_gpio>;
+
+		lid {
+			label = "lid";
+			gpios = <&tlmm 31 GPIO_ACTIVE_LOW>;
+			linux,input-type = <EV_SW>;
+			linux,code = <SW_LID>;
+			debounce-interval = <200>;
+			wakeup-source;
+		};
 	};
 
 	extcon_demo: extcon-demo {
