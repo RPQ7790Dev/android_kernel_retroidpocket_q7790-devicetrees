@@ -185,61 +185,6 @@
 			};
 		};
 	};
-
-	mcu_power_ctrl {
-		uart_power_default: uart_power_default {
-			mux {
-				pins = "gpio54";
-				function = "gpio";
-			};
-
-			config {
-				pins = "gpio54";
-				drive-strength = <2>;
-				bias-pull-up;
-				output-high;
-			};
-		};
-		uart_power_sleep: uart_power_sleep {
-			mux {
-				pins = "gpio54";
-				function = "gpio";
-			};
-
-			config {
-				pins = "gpio54";
-				drive-strength = <2>;
-				bias-pull-down;
-				output-low;
-			};
-		};
-		mcu_power_default: mcu_power_default {
-			mux {
-				pins = "gpio56";
-				function = "gpio";
-			};
-
-			config {
-				pins = "gpio56";
-				drive-strength = <2>;
-				bias-pull-up;
-				output-high;
-			};
-		};
-		mcu_power_sleep: mcu_power_sleep {
-			mux {
-				pins = "gpio56";
-				function = "gpio";
-			};
-
-			config {
-				pins = "gpio56";
-				drive-strength = <2>;
-				bias-pull-down;
-				output-low;
-			};
-		};
-	};
 };
 
 &qupv3_2 {
@@ -346,12 +291,30 @@
 		status = "okay";
 	};
 
-	mcu_power_ctrl: mcu_power_ctrl {
-		compatible = "mcu-power-ctrl";
-		pinctrl-names = "default", "sleep";
-		pinctrl-0 = <&uart_power_default>, <&mcu_power_default>;
-		pinctrl-1 = <&uart_power_sleep>, <&mcu_power_sleep>;
-		uart_power_gpio = <&tlmm 54 GPIO_ACTIVE_HIGH>;
-		mcu_power_gpio = <&tlmm 56 GPIO_ACTIVE_HIGH>;
+	joystick_vdd_reg: joystick_vdd_reg {
+		compatible = "regulator-fixed";
+		regulator-name = "joystick_vdd_reg";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		enable-active-high;
+		gpio = <&tlmm 56 GPIO_ACTIVE_HIGH>;
+	};
+
+	joystick_levelshifter_reg: joystick_levelshifter_reg {
+		compatible = "regulator-fixed";
+		regulator-name = "joystick_levelshifter_reg";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		enable-active-high;
+		gpio = <&tlmm 54 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&qupv3_se10_uart {
+	joystick: joystick {
+		compatible = "moorechip,joystick";
+		vdd-supply = <&joystick_vdd_reg>;
+		levelshifter-supply = <&joystick_levelshifter_reg>;
+		moorechip,layout-nintendo;
 	};
 };

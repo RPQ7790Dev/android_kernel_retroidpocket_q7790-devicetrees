@@ -243,3 +243,8 @@
 		panel = <&dsi_il97680a_960p_cmd>;
 	};
 };
+
+&joystick {
+	panel = <&vtdr6130_visionox_cog_1080p>;
+	secondary-panel = <&dsi_il97680a_960p_cmd>;
+};
