@@ -251,6 +251,10 @@
 	};
 };
 
+&pm7550ba_vib {
+	status = "disabled";
+};
+
 &soc {
 	codec_vdd_1v8: codec_vdd_1v8 {
 		compatible = "regulator-fixed";
