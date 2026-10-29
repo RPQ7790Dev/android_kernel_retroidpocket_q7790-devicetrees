@@ -212,8 +212,7 @@
 		focaltech,display-coords = <0 0 1080 1920>;
 		vdd-supply = <&L22B>;
 		vcc_i2c-supply = <&vcc_i2c_pwr>;
-		focaltech,swap-x = <1>;
-		focaltech,swap-y = <0>;
+		focaltech,misconfigured-x-line-order;
 		pinctrl-names = "pmx_ts_active", "pmx_ts_suspend", "pmx_ts_release";
 		pinctrl-0 = <&ts_active>;
 		pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
@@ -237,8 +236,6 @@
 		focaltech,display-coords = <0 0 1280 960>;
 		vdd-supply = <&avdd_pwr_sec>;
 		vcc_i2c-supply = <&vcc_i2c_pwr_sec>;
-		focaltech,swap-x = <0>;
-		focaltech,swap-y = <0>;
 		pinctrl-names = "pmx_sec_ts_active", "pmx_sec_ts_suspend", "pmx_sec_ts_release";
 		pinctrl-0 = <&sec_ts_active>;
 		pinctrl-1 = <&sec_ts_int_suspend &sec_ts_reset_suspend>;
