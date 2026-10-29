@@ -223,10 +223,10 @@
 
 &qupv3_se6_i2c {
 	status = "okay";
-	qcom,i2c-touch-active = "focaltech,fts_ts_sec";
+	qcom,i2c-touch-active = "focaltech,fts_ts";
 
 	focaltech@38 {
-		compatible = "focaltech,fts_ts_sec";
+		compatible = "focaltech,fts_ts";
 		reg = <0x38>;
 		interrupt-parent = <&tlmm>;
 		interrupts = <123 0x2008>;
@@ -234,6 +234,7 @@
 		focaltech,irq-gpio = <&tlmm 123 0x2008>;
 		focaltech,max-touch-number = <10>;
 		focaltech,display-coords = <0 0 1280 960>;
+		focaltech,touch-type = "secondary";
 		vdd-supply = <&avdd_pwr_sec>;
 		vcc_i2c-supply = <&vcc_i2c_pwr_sec>;
 		pinctrl-names = "pmx_sec_ts_active", "pmx_sec_ts_suspend", "pmx_sec_ts_release";
